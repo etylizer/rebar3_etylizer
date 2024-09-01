@@ -20,7 +20,7 @@ init(State) ->
             {example, "rebar3 etylizer"}, % How to use the plugin
             % list of options understood by the plugin
             {opts, [project_root, src_path]},
-            {short_desc, "A rebar plugin"},
+            {short_desc, "etylizer plugin"},
             {desc, "A rebar plugin to analyze a codebase using etylizer"}
     ]),
     {ok, rebar_state:add_provider(State, Provider)}.

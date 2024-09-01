@@ -3,18 +3,13 @@ rebar3_etylizer
 
 A rebar plugin for [etylizer](https://github.com/etylizer/etylizer/).
 
-Build
------
-
-    $ rebar3 compile
-
 Use
 ---
 
 Add the plugin to your rebar config:
 
     {plugins, [
-        {rebar3_etylizer, {git, "https://host/user/rebar3_etylizer.git", {tag, "0.1.0"}}}
+        {rebar3_etylizer, {git, "https://github.com/etylizer/rebar3_etylizer.git"}}
     ]}.
 
 Then just call your plugin directly in an existing application:
@@ -24,6 +19,11 @@ Then just call your plugin directly in an existing application:
     ===> Fetching rebar3_etylizer
     ===> Compiling rebar3_etylizer
     <Plugin Output>
+
+Build
+-----
+
+    $ rebar3 compile
 
 Config
 ---
