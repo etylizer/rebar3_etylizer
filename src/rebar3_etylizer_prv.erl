@@ -32,9 +32,14 @@ do(State) ->
                  error -> [];
                  {ok, C} -> C
              end,
+    Defines = proplists:get_value(defines, Config, []),
+    IncludePaths = proplists:get_value(include, Config, ["include/"]),
     SrcPaths = proplists:get_value(src_paths, Config, ["src/"]),
     ProjectRoot = proplists:get_value(project_root, Config, "."),
-    Opts = #opts{src_paths = SrcPaths, project_root = ProjectRoot},
+    Opts = #opts{defines = Defines,
+                 includes = IncludePaths,
+                 src_paths = SrcPaths,
+                 project_root = ProjectRoot},
     try ety_main:doWork(Opts), {ok, State}
     catch
         error:Reason ->
