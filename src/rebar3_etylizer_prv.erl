@@ -2,7 +2,7 @@
 
 -export([init/1, do/1, format_error/1]).
 
--include_lib("etylizer/src/ety_main.hrl").
+-include_lib("etylizer/src/etylizer_main.hrl").
 
 -define(PROVIDER, etylizer).
 -define(DEPS, [app_discovery]).
@@ -40,7 +40,7 @@ do(State) ->
                  includes = IncludePaths,
                  src_paths = SrcPaths,
                  project_root = ProjectRoot},
-    try ety_main:doWork(Opts), {ok, State}
+    try etylizer_main:doWork(Opts), {ok, State}
     catch
         error:Reason ->
             rebar_log:log(error, "etylizer: ~ts", [Reason]),
