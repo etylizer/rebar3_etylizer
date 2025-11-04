@@ -42,41 +42,46 @@ do(State) ->
         filelib:wildcard(filename:join([SrcPath, "*.erl"]))
     end, SrcPaths),
     
-    rebar_log:log(info, "Found ~p source files to analyze", [length(SourceFiles)]),
+    rebar_log:log(info, "Found ~p source files to analyze: ~p", [length(SourceFiles), SourceFiles]),
+
+    
+    % Get espresso_root from config or use default plugin location
+    DefaultEspressoRoot = filename:join([rebar_dir:plugins_dir(State), "etylizer", "_build"]),
+    EspressoRoot = proplists:get_value(espresso_root, Config, DefaultEspressoRoot),
     
     % Analyze each source file individually
-    analyze_files(SourceFiles, Defines, IncludePaths, SrcPaths, ProjectRoot),
+    analyze_files(SourceFiles, Defines, IncludePaths, SrcPaths, ProjectRoot, EspressoRoot),
     
     {ok, State}.
 
--spec analyze_files([string()], list(), [string()], [string()], string()) -> ok.
-analyze_files([], _, _, _, _) ->
-    ok;
-analyze_files([File | Rest], Defines, IncludePaths, SrcPaths, ProjectRoot) ->
+-spec analyze_files([string()], list(), [string()], [string()], string(), string()) -> ok.
+analyze_files([], _, _, _, _, _) -> ok;
+analyze_files([File | Rest], Defines, IncludePaths, SrcPaths, ProjectRoot, EspressoRoot) ->
     rebar_log:log(info, "Analyzing source file: ~s", [File]),
-    
+
+
     try
         % Create opts for individual file analysis with report mode
         Opts = #opts{
-            defines = Defines,
-            includes = IncludePaths,
-            src_paths = SrcPaths,
+            % defines = Defines,
+            % includes = IncludePaths,
+            % src_paths = SrcPaths,
             project_root = ProjectRoot,
-            files = [File],
-            % Enable report mode - you might need to check the actual option name in etylizer
-            % If report mode is controlled differently, adjust accordingly
-            dump = true,  % or whatever option enables reporting
-            mode = test_mode  % or use whatever mode enables individual file reporting
+            espresso_root = EspressoRoot,
+            report_mode = report, 
+            force = true,
+            no_deps = true,
+            files = [File]
         },
         
-        etylizer_main:main(Opts)
+        etylizer_main:doWork(Opts)
     catch
         error:Reason:St ->
-            rebar_log:log(error, "Failed to analyze ~s: ~p", [File, Reason]),
+            rebar_log:log(error, "Failed to analyze ~s: ~p~n~p", [File, Reason, St]),
             rebar_log:log(debug, "Stack trace: ~p", [St])
     end,
     
-    analyze_files(Rest, Defines, IncludePaths, SrcPaths, ProjectRoot).
+    analyze_files(Rest, Defines, IncludePaths, SrcPaths, ProjectRoot, EspressoRoot).
 
 -spec format_error(any()) ->  iolist().
 format_error(Reason) ->
