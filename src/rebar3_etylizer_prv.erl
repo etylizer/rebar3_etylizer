@@ -64,7 +64,7 @@ analyze_files([File | Rest], Defines, IncludePaths, SrcPaths, ProjectRoot, Espre
         % Create opts for individual file analysis with report mode
         Opts = #opts{
             % defines = Defines,
-            % includes = IncludePaths,
+            includes = IncludePaths,
             % src_paths = SrcPaths,
             project_root = ProjectRoot,
             espresso_root = EspressoRoot,
