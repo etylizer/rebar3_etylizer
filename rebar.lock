@@ -1,7 +1,7 @@
 {"1.2.0",
 [{<<"etylizer">>,
   {git,"https://github.com/etylizer/etylizer",
-       {ref,"e54b13a34265083c1c5f433040ca699769c911ec"}},
+       {ref,"05ee77b182dbc2c92ccfd2bb389f762ea1482c51"}},
   0},
  {<<"getopt">>,{pkg,<<"getopt">>,<<"1.0.2">>},1}]}.
 [
